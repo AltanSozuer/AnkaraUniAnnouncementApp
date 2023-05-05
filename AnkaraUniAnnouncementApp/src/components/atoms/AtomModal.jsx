@@ -4,13 +4,16 @@ export default function AtomModal({
     style,
     animationType,
     transparent,
-    visible
+    visible,
+    children
 }) {
     return (
         <Modal
             style={style}
             animationType={animationType}
             transparent={transparent}
-            visible={visible} />
+            visible={visible} >
+                {children}
+        </Modal>
     )
 }
