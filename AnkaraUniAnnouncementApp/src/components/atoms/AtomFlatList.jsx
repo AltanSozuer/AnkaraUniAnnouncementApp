@@ -6,6 +6,6 @@ export default function AtomFlatList({
     keyExtractor
 }) {
     return (
-        <FlatList style={style} data={data} renderItem={renderItem} keyExtractor={keyExtractor} />
+        <FlatList style={style} horizontal={false} data={data} renderItem={renderItem} keyExtractor={keyExtractor} />
     )
 }
