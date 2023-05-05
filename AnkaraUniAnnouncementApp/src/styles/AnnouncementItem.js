@@ -6,7 +6,8 @@ const announcementItemStyle = StyleSheet.create({
         shadowRadius: 10,
         borderRadius: 10,
         margin: 10,
-        padding: 10
+        padding: 10,
+        borderWidth: 1
     },
     fromImg: {
         backgroundColor: "yellow",
@@ -14,7 +15,7 @@ const announcementItemStyle = StyleSheet.create({
         margin: 20,
         width: 50,
         height: 50,
-        borderRadius: "50%",
+        borderRadius: 50,
     },
     contentContainer: {
         flex: 1
