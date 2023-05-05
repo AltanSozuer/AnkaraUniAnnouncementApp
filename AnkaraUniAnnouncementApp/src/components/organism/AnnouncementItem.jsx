@@ -8,12 +8,13 @@ export default function AnnouncementItem({
     from,
     title,
     date,
+    imageSrc,
     onPress
 }) {
     return (
         <Pressable onPress={onPress}>            
             <AtomView style={announcementItemStyle.container}>
-                <AtomImage style={announcementItemStyle.fromImg} src={"https://images.pexels.com/photos/3992656/pexels-photo-3992656.png?auto=compress&cs=tinysrgb&dpr=2&w=500"}/>
+                <AtomImage style={announcementItemStyle.fromImg} source={imageSrc}/>
                 <TextWithTitle style={announcementItemStyle} from={from} title={title} date={date} />
             </AtomView>
         </Pressable>

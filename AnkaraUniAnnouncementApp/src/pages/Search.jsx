@@ -1,8 +1,34 @@
-import { Text, View } from "react-native"
-export default function Search() {
+import { useState } from "react";
+import AtomIconButton from "../components/atoms/AtomIconButton";
+import TextInputEle from "../components/organism/TextInputEle";
+import { Ionicons } from '@expo/vector-icons';
+import AtomView from "../components/atoms/AtomView";
+import searchPageStyle from "../styles/SearchPage";
+import AnnouncementItem from "../components/organism/AnnouncementItem";
+import ANNO_ITEM from "../constants/DummyAnnouncementItem";
+import AtomSelect from "../components/atoms/AtomSelect";
+import AnnouncementList from "../components/templates/AnnouncementList";
+import FilterModal from "../components/templates/FilterModal";
+
+export default function Search({navigation}) {
+    const [filterModalVisible, setFilterModalVisible] = useState(false)
+
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text>Search Page</Text>
-        </View>
+        
+        <AtomView style={searchPageStyle.parent}>
+            <AtomView style={searchPageStyle.searchContainer}>
+                <TextInputEle style={searchPageStyle.textInput} />
+                <AtomIconButton iconName={"filter-variant"}
+                    mode={"contained"}
+                    iconColor={"white"}
+                    containerColor={"green"}
+                    style={searchPageStyle.filterButton}
+                    disabled={false}
+                    size={20}
+                    onPress={() => setFilterModalVisible(true)} />
+            </AtomView>
+            <AnnouncementList navigation={navigation} />
+            <FilterModal modalVisible={filterModalVisible} setModalVisible={setFilterModalVisible} />
+        </AtomView>
     )
 };
