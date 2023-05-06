@@ -6,6 +6,7 @@ export default function InputWithTitle({
     text,
     value,
     inputType,
+    onChangeText,
     containerStyle,
     textStyle,
     inputStyle,
@@ -14,7 +15,10 @@ export default function InputWithTitle({
     return (
         <AtomView style={containerStyle}>
             <AtomText text={text} style={textStyle} />
-            <AtomTextInput style={inputStyle} value={value} keyboardType={inputType} secureTextEntry={secureTextEntry} />
+            <AtomTextInput style={inputStyle} value={value} 
+                keyboardType={inputType} 
+                onChangeText={onChangeText}
+                secureTextEntry={secureTextEntry} />
         </AtomView>
     )
 };

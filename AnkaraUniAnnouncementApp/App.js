@@ -64,7 +64,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName='Home'
+      <Tab.Navigator initialRouteName='Profile'
         screenOptions={{
           tabBarActiveTintColor: 'green',
           tabBarInactiveTintColor: 'black',
@@ -73,6 +73,7 @@ export default function App() {
             borderTopRightRadius: 30,
             borderTopLeftRadius: 30
           },
+          tabBarHideOnKeyboard: true,
           headerShown: false
         }}>
 

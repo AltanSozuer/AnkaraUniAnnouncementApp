@@ -3,6 +3,7 @@ import InputWithTitle from "../molecules/InputWithTitle";
 
 export default function TextInputGroup({
     data,
+    onChangeText,
     containerStyle,
     itemContainerStyle,
     textStyle,
@@ -12,7 +13,8 @@ export default function TextInputGroup({
         <AtomView style={containerStyle}>
             <InputWithTitle inputType={"default"} 
                 text={"Full Name"}
-                value={data.fullname} 
+                value={data.fullname}
+                onChangeText={onChangeText("fullname")} 
                 textStyle={textStyle} 
                 containerStyle={itemContainerStyle} 
                 inputStyle={inputStyle}
@@ -20,6 +22,7 @@ export default function TextInputGroup({
             <InputWithTitle inputType={"email-address"} 
                 text={"Your Email"} 
                 value={data.email} 
+                onChangeText={onChangeText("email")} 
                 textStyle={textStyle} 
                 containerStyle={itemContainerStyle} 
                 inputStyle={inputStyle} 
@@ -27,6 +30,7 @@ export default function TextInputGroup({
             <InputWithTitle inputType={"default"} 
                 text={"Password"}
                 value={data.password} 
+                onChangeText={onChangeText("password")} 
                 textStyle={textStyle} 
                 containerStyle={itemContainerStyle} 
                 inputStyle={inputStyle}

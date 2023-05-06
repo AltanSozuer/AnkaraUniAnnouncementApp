@@ -8,7 +8,8 @@ import formWithImageStyle from "../../styles/FormWithImage";
 
 export default function FormWithImage({
     data,
-    onPress
+    onPress,
+    onChangeData
 }) {
     return (
         <AtomScrollView style={formWithImageStyle.scrollContainer}>
@@ -20,7 +21,8 @@ export default function FormWithImage({
                     titleStyle={formWithImageStyle.imageTitle} />
                 <AtomText text={"Edit Profile"} 
                     style={formWithImageStyle.infoTitle} />
-                <TextInputGroup data={data} inputStyle={formWithImageStyle.inputStyle}
+                <TextInputGroup data={data} onChangeText={onChangeData} 
+                    inputStyle={formWithImageStyle.inputStyle}
                     textStyle={formWithImageStyle.inputTextStyle} 
                     itemContainerStyle={formWithImageStyle.inputItemContainer} 
                     containerStyle={formWithImageStyle.inputGroupContainer} />
