@@ -3,14 +3,17 @@ import { StyleSheet } from "react-native";
 const filterModalStyle = StyleSheet.create({
     parentContainer: {
         flex: 1,
-        justifyContent: 'flex-end',
-        marginTop: 22
+        alignItems: "center",
+        justifyContent: 'center',
+        // marginTop: 22
     },
     modal: {
         backgroundColor: "green",
         width: "100%",
         borderTopRightRadius: 90,
-        borderTopLeftRadius: 90
+        borderTopLeftRadius: 90,
+        position: "absolute",
+        bottom: 0
     },
     titleContainer: {
         flexDirection: "column",
@@ -28,7 +31,7 @@ const filterModalStyle = StyleSheet.create({
     mainTitle: {
         textAlign: "center",
         fontSize: 20,
-        fontWeight: 20,
+        fontWeight: 200,
         margin: 10
     },
     selectGroupContainer: {
@@ -41,10 +44,11 @@ const filterModalStyle = StyleSheet.create({
     },
     selectTitle: {
         fontSize: 16,
-        marginBottom: 6
+        marginBottom: 6,
+        width: 200
     },
     select: {
-        textAlign: "left"
+        textAlign: "left",
     },
     buttonContainer: {
         padding: 30
