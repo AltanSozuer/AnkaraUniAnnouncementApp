@@ -1,8 +1,16 @@
-import { Text, View } from "react-native"
+import { useState } from "react"
+import FormWithImage from "../components/templates/FormWithImage"
+import SAMPLE_PERSON from "../constants/SamplePersonInfo"
 export default function Profile() {
+    const [data, setProfileData] = useState(SAMPLE_PERSON)
+
+    const handleProfileData = (name) => {
+        return (newValue) => {
+            setProfileData( ( oldValue ) => ({ ...oldValue, [name]: newValue }))
+        }
+    }
+
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text>Profile Page</Text>
-        </View>
+       <FormWithImage data={data} onChangeData={handleProfileData} />
     )
 };

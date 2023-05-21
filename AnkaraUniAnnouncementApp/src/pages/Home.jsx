@@ -1,21 +1,26 @@
-import { Text, View } from "react-native"
-import AnnouncementItem from "../components/organism/AnnouncementItem"
-import AtomSafeAreaView from '../components/atoms/AtomSafeAreaView'
-import AtomFlatList from '../components/atoms/AtomFlatList'
-import ANNO_ITEM from "../constants/DummyAnnouncementItem"
+import { useState, useRef, useEffect } from "react"
+import AnnouncementList from "../components/templates/AnnouncementList"
+import { Notification } from "../services/Notification"
+import { FACULTY_DOMAINS } from "../constants/FacultyDomains"
 
-export default function Home() {
+export default function Home({navigation}) {
+    const [notificationList, setNotificationList] = useState([]);
+    const currNotifListRef = useRef(notificationList)
+    const handleNotificationList = (newNotifList) => {
+        console.log('handleNotificationList: ',newNotifList);
+        setNotificationList(() => newNotifList);
+    }
 
+    useEffect(() => {
+        const func = async () => {
+            const payload = await new Notification().getAllNotifications();
+            handleNotificationList(payload.data.data)
+        }
+        func().catch(console.error)
+    }, [currNotifListRef.current])
     return (
-        // <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
-        //     {/* <Text>Homepage</Text> */}
-           
-        // </View>
-        <AtomSafeAreaView>
-            <AtomFlatList
-                data={new Array(10).map( () => ANNO_ITEM)}
-                renderItem={(item) => <AnnouncementItem from={item.from} title={item.title} date={item.date} />}>
-            </AtomFlatList>
-        </AtomSafeAreaView>
+        <AnnouncementList navigation={navigation} 
+            announcementList={notificationList} 
+            handleAnnouncementList={handleNotificationList} />
     )
 };
