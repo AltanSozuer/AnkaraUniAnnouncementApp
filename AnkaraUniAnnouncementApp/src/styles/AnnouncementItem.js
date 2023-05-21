@@ -9,13 +9,12 @@ const announcementItemStyle = StyleSheet.create({
         padding: 10,
         borderWidth: 1
     },
-    fromImg: {
-        backgroundColor: "yellow",
-        padding: 10,
-        margin: 20,
-        width: 50,
-        height: 50,
-        borderRadius: 50,
+    fromAvatar: {
+        margin: 20
+    },
+    fromAvatarText: {
+        fontSize: 16, 
+        textAlign: "center"
     },
     contentContainer: {
         flex: 1

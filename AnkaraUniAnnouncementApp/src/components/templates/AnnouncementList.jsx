@@ -1,21 +1,27 @@
 import AnnouncementItem from "../organism/AnnouncementItem";
 import AtomSafeAreaView from '../atoms/AtomSafeAreaView';
 import AtomFlatList from '../atoms/AtomFlatList'
+import { firstLettersAsAString } from "../../utils/StringManipulation";
 import ANNO_ITEM from "../../constants/DummyAnnouncementItem";
 
-export default function AnnouncementList({navigation}) {
+export default function AnnouncementList({
+    navigation,
+    announcementList,
+    handleAnnouncementList
+}) {
     return (
         <AtomSafeAreaView>
             <AtomFlatList
-                data={ANNO_ITEM}
+                data={announcementList}
                 renderItem={({item}) => 
                    <AnnouncementItem from={item.from}
-                        imageSrc={item.imageSrc} 
-                        title={item.title} 
+                        fromLabel={firstLettersAsAString(item.from)} 
+                        title={item.notificationTitle} 
                         date={item.date} 
                         onPress={() => {
                             navigation.navigate('AnnouncementDetail', {
-                                itemId: 75
+                                itemId: item._id,
+                                content: item.notificationContent
                             })
                         }}/>
                 } >
