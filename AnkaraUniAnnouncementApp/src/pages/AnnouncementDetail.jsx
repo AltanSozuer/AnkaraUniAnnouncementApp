@@ -3,15 +3,15 @@ import RenderHTML from "react-native-render-html";
 
 
 export default function AnnouncementDetail({
-    route,
-    navigate
+    route
 }) {
-    const { itemId, content } = route.params;
+    const { notificationData } = route.params;
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text>AnnouncementDetail Page</Text>
-            <Text>Item id: {itemId}</Text>
-            <RenderHTML contentWidth={useWindowDimensions} source={{ html : content }}  />        
+        <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 30, fontVariant: "bold", marginTop: 10, marginHorizontal: 6 }}>{notificationData.notificationTitle}</Text>
+            <View style={{marginHorizontal: 10}}>
+                <RenderHTML contentWidth={useWindowDimensions} source={{ html : notificationData.notificationContent }}  />
+            </View>        
         </View>
     )    
 };

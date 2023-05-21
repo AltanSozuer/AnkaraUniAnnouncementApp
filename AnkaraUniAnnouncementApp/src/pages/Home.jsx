@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react"
 import AnnouncementList from "../components/templates/AnnouncementList"
-import { Notification } from "../services/Notification"
-import { FACULTY_DOMAINS } from "../constants/FacultyDomains"
+import { NotificationService } from "../services/NotificationService"
 
 export default function Home({navigation}) {
     const [notificationList, setNotificationList] = useState([]);
     const currNotifListRef = useRef(notificationList)
+    
     const handleNotificationList = (newNotifList) => {
         console.log('handleNotificationList: ',newNotifList);
         setNotificationList(() => newNotifList);
@@ -13,7 +13,8 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         const func = async () => {
-            const payload = await new Notification().getAllNotifications();
+            const payload = await new NotificationService().getAllNotifications();
+            console.log('asdasd: ',payload);
             handleNotificationList(payload.data.data)
         }
         func().catch(console.error)

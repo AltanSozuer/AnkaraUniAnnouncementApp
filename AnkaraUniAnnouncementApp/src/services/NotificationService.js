@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+import Notification from '../models/Notification';
 const SOURCE_URL = 'http://localhost:8080';
 
-export class Notification {
+export class NotificationService {
     
     constructor() { }
 
@@ -14,7 +14,7 @@ export class Notification {
             })
             .then(data => {
                 console.log('getAllNotifications: ',data);
-                return data;
+                return data.map(dt => new Notification(dt));
             })
             .catch(err => {
                 console.log('getAllNotifications 1 error: ',err)

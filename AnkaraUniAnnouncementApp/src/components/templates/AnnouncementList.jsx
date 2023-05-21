@@ -2,7 +2,6 @@ import AnnouncementItem from "../organism/AnnouncementItem";
 import AtomSafeAreaView from '../atoms/AtomSafeAreaView';
 import AtomFlatList from '../atoms/AtomFlatList'
 import { firstLettersAsAString } from "../../utils/StringManipulation";
-import ANNO_ITEM from "../../constants/DummyAnnouncementItem";
 
 export default function AnnouncementList({
     navigation,
@@ -21,7 +20,7 @@ export default function AnnouncementList({
                         onPress={() => {
                             navigation.navigate('AnnouncementDetail', {
                                 itemId: item._id,
-                                content: item.notificationContent
+                                notificationData: item,
                             })
                         }}/>
                 } >
