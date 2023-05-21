@@ -12,9 +12,9 @@ export class NotificationService {
                 facultyList,
                 timeUntil
             })
-            .then(data => {
+            .then(({data}) => {
                 console.log('getAllNotifications: ',data);
-                return data.map(dt => new Notification(dt));
+                return data.data.map(dt => new Notification(dt));
             })
             .catch(err => {
                 console.log('getAllNotifications 1 error: ',err)

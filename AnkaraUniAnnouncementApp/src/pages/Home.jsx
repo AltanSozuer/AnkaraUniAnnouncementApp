@@ -14,8 +14,7 @@ export default function Home({navigation}) {
     useEffect(() => {
         const func = async () => {
             const payload = await new NotificationService().getAllNotifications();
-            console.log('asdasd: ',payload);
-            handleNotificationList(payload.data.data)
+            handleNotificationList(payload)
         }
         func().catch(console.error)
     }, [currNotifListRef.current])
