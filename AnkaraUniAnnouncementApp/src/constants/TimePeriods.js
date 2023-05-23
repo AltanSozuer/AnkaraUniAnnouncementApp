@@ -1,7 +1,13 @@
-const TIME_PERIODS = [
-    "Last 24 Hours",
-    "Last 1 Week",
-    "Last 1 Month"
-]
+const TIME_PERIODS = {
+    LAST_24_HOURS: "Last 24 Hours",
+    LAST_1_WEEK: "Last 1 Week",
+    LAST_1_MONTH: "Last 1 Month"
+}
 
-export default TIME_PERIODS;
+
+const timePeriodOptions = Object.values(TIME_PERIODS)
+
+export {
+    TIME_PERIODS,
+    timePeriodOptions
+} 

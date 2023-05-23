@@ -6,7 +6,15 @@ export class NotificationService {
     
     constructor() { }
 
-    async getAllNotifications({facultyList, timeUntil} = {}) {
+    /**
+     * Fetches raw list of notification data by API call
+     * @param {Object} object
+     * @param {string[] | undefined} object.facultyList - List of faculty names
+     * @param {string | undefined} object.timeUntil - Date string that specifies from now to timeUntil
+     * @param {string} object.text - Text that will be searched in announcement titles
+     * @returns {Notification[]} - List of Notification data
+     */
+    async getAllNotifications({facultyList, timeUntil, text} = {}) {
         try { 
             const notifications = axios.post(`${SOURCE_URL}${'/notifications'}`, {
                 facultyList,
