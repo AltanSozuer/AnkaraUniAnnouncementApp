@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 export default function AtomSelect({
     data,
     onSelect,
+    selectedItem,
     buttonTextAfterSelection,
     rowTextForSelection,
     rowTextStyle,
@@ -17,6 +18,7 @@ export default function AtomSelect({
             style={style}
             data={data}
             onSelect={onSelect}
+            defaultValue={selectedItem}
             buttonTextAfterSelection={buttonTextAfterSelection}
             rowTextForSelection={rowTextForSelection}
             renderDropdownIcon={renderDropdownIcon}
