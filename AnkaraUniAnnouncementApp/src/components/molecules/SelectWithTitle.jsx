@@ -8,12 +8,13 @@ export default function SelectWithTitle({
     selectStyle,
     text,
     selectOptions,
+    selectedItem,
     onSelect
 }) {
     return (
         <AtomView style={containerStyle}>
             <AtomText style={textStyle} text={text}/>
-            <AtomSelect data={selectOptions} onSelect={onSelect} style={selectStyle}/>
+            <AtomSelect data={selectOptions} onSelect={onSelect} style={selectStyle} selectedItem={selectedItem}/>
         </AtomView>
     )
 };
