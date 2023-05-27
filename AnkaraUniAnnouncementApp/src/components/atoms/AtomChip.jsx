@@ -3,6 +3,7 @@ export default function AtomChip({
     style,
     icon,
     onPress,
+    onClose,
     mode,
     children,
     rippleColor
@@ -11,6 +12,7 @@ export default function AtomChip({
         <Chip style={style} icon={icon}
             mode={mode}
             onPress={onPress}
+            onClose={onClose}
             rippleColor={rippleColor}>
             {children}
         </Chip>

@@ -4,9 +4,12 @@ import TextInputEle from "../components/organism/TextInputEle";
 import AtomView from "../components/atoms/AtomView";
 import searchPageStyle from "../styles/SearchPage";
 import AnnouncementList from "../components/templates/AnnouncementList";
+import AnnouncementSkeletonGroup from "../components/organism/AnnouncementSkeletonGroup";
 import FilterModal from "../components/templates/FilterModal";
 import { NotificationService } from "../services/NotificationService";
 import { subtractGivenAmountOfTimeToNow } from "../utils/DateManipulation";
+import NoSearchResults from "../components/organism/NoSearchResults";
+import FiltersSection from "../components/organism/FiltersSection";
 
 export default function Search({ navigation }) {
     const [filterModalVisible, setFilterModalVisible] = useState(false)
@@ -24,12 +27,20 @@ export default function Search({ navigation }) {
         setSelectedFacultyNames(() => [newFacultyList]);
     }
 
+    const clearSelectedFacultyNames = () => {
+        setSelectedFacultyNames(() => undefined) 
+    }
+
+    const clearSelectedTimePeriod = () => {
+        setSelectedTimePeriod(() => undefined) 
+    }
+
     const handleSelectedTimePeriod = (newTimePeriod) => {
         setSelectedTimePeriod(() => newTimePeriod);
     }
 
     const clearFilters = () => {
-        handleSelectedFacultyNames(undefined)
+        clearSelectedFacultyNames()
         handleSelectedTimePeriod(undefined)
     }
 
@@ -37,9 +48,15 @@ export default function Search({ navigation }) {
         setNotificationList(() => newNotifList);
     }
 
+    const isThereAnyFilterApplied = () => {
+        return selectedFacultyNames || selectedTimePeriod
+    }
+
+
     const getNotifications = async () => {
         const notifList = await new NotificationService().getAllNotifications({
-            facultyList: selectedFacultyNames, timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod)
+            facultyList: selectedFacultyNames, 
+            timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod)
         })
         handleNotificationList(notifList);
     }
@@ -48,13 +65,13 @@ export default function Search({ navigation }) {
         const getNotifsWithFilters = async () => {
             const payload = await new NotificationService().getAllNotifications({ 
                 facultyList: selectedFacultyNames, 
-                timeUntil: selectedTimePeriod, 
+                timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod), 
                 searchText: searchText });
             // const payload = await new NotificationService().getAllNotifications();
             handleNotificationList(payload)
         }
         getNotifsWithFilters().catch(console.error)
-    }, [currNotifListRef.current , searchText])
+    }, [currNotifListRef.current , searchText, selectedFacultyNames, selectedTimePeriod])
 
     return (
         <AtomView style={searchPageStyle.parent}>
@@ -73,7 +90,21 @@ export default function Search({ navigation }) {
                     size={20}
                     onPress={() => setFilterModalVisible(true)} />
             </AtomView>
-            <AnnouncementList navigation={navigation} announcementList={notificationList} />
+            { isThereAnyFilterApplied && 
+                <AtomView>
+                    <FiltersSection 
+                        selectedFacultyNames={selectedFacultyNames}
+                        selectedTimePeriod={selectedTimePeriod}
+                        clearSelectedFacultyNames={clearSelectedFacultyNames}
+                        clearSelectedTimePeriod={clearSelectedTimePeriod} />
+                </AtomView>
+            }
+            { notificationList?.length 
+            ? <AnnouncementList navigation={navigation} announcementList={notificationList} />
+            : <NoSearchResults />
+            
+            // : <AnnouncementSkeletonGroup itemCount={6} containerStyle={{ margin: 15, padding: 10 }}/>
+            }
             <FilterModal modalVisible={filterModalVisible}
                 selectedFacultyNames={selectedFacultyNames}
                 selectedTimePeriod={selectedTimePeriod}
