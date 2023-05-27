@@ -14,11 +14,12 @@ export class NotificationService {
      * @param {string} object.text - Text that will be searched in announcement titles
      * @returns {Notification[]} - List of Notification data
      */
-    async getAllNotifications({facultyList, timeUntil, text} = {}) {
+    async getAllNotifications({facultyList, timeUntil, searchText} = {}) {
         try { 
             const notifications = axios.post(`${SOURCE_URL}${'/notifications'}`, {
                 facultyList,
-                timeUntil
+                timeUntil,
+                searchText
             })
             .then(({data}) => {
                 console.log('getAllNotifications: ',data);

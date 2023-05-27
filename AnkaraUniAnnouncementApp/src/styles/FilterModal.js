@@ -31,11 +31,12 @@ const filterModalStyle = StyleSheet.create({
     mainTitle: {
         textAlign: "center",
         fontSize: 20,
-        fontWeight: 200,
+        fontWeight: 400,
+        color: "white",
         margin: 10
     },
     selectGroupContainer: {
-        backgroundColor: "red",
+        // backgroundColor: "red",
         margin: 10,
         padding: 10
     },
@@ -44,11 +45,13 @@ const filterModalStyle = StyleSheet.create({
     },
     selectTitle: {
         fontSize: 16,
+        fontWeight: 300,
+        color: "white",
         marginBottom: 6,
         width: 200
     },
     select: {
-        textAlign: "left",
+        textAlign: "left"
     },
     buttonContainer: {
         padding: 30

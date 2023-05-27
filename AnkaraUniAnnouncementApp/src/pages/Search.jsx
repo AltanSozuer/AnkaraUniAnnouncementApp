@@ -8,7 +8,7 @@ import FilterModal from "../components/templates/FilterModal";
 import { NotificationService } from "../services/NotificationService";
 import { subtractGivenAmountOfTimeToNow } from "../utils/DateManipulation";
 
-export default function Search({navigation}) {
+export default function Search({ navigation }) {
     const [filterModalVisible, setFilterModalVisible] = useState(false)
     const [notificationList, setNotificationList] = useState([]);
     const [selectedFacultyNames, setSelectedFacultyNames] = useState(undefined);
@@ -38,18 +38,23 @@ export default function Search({navigation}) {
     }
 
     const getNotifications = async () => {
-        const notifList = await new NotificationService().getAllNotifications({ facultyList: selectedFacultyNames, timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod)})
+        const notifList = await new NotificationService().getAllNotifications({
+            facultyList: selectedFacultyNames, timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod)
+        })
         handleNotificationList(notifList);
     }
 
     useEffect(() => {
         const getNotifsWithFilters = async () => {
-            // const payload = await new NotificationService().getAllNotifications({ facultyList: selectedFacultyNames, timeUntil: selectedTimePeriod});
-            const payload = await new NotificationService().getAllNotifications();
+            const payload = await new NotificationService().getAllNotifications({ 
+                facultyList: selectedFacultyNames, 
+                timeUntil: selectedTimePeriod, 
+                searchText: searchText });
+            // const payload = await new NotificationService().getAllNotifications();
             handleNotificationList(payload)
         }
         getNotifsWithFilters().catch(console.error)
-    }, [currNotifListRef.current])
+    }, [currNotifListRef.current , searchText])
 
     return (
         <AtomView style={searchPageStyle.parent}>
