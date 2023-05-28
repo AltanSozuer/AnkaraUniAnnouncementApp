@@ -1,3 +1,4 @@
+import { RefreshControl } from "react-native";
 import AnnouncementItem from "../organism/AnnouncementItem";
 import AtomSafeAreaView from '../atoms/AtomSafeAreaView';
 import AtomFlatList from '../atoms/AtomFlatList'
@@ -7,7 +8,9 @@ import { fromNow } from "../../utils/DateManipulation";
 export default function AnnouncementList({
     navigation,
     announcementList,
-    handleAnnouncementList
+    handleAnnouncementList,
+    refreshing,
+    onRefresh
 }) {
     return (
         <AtomSafeAreaView>
@@ -24,6 +27,9 @@ export default function AnnouncementList({
                                 notificationData: item,
                             })
                         }}/>
+                }
+                refreshControlComp={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } >
             </AtomFlatList>
         </AtomSafeAreaView>

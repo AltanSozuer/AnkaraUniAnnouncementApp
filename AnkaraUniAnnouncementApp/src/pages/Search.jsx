@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { ActivityIndicator } from "react-native";
 import AtomIconButton from "../components/atoms/AtomIconButton";
 import TextInputEle from "../components/organism/TextInputEle";
 import AtomView from "../components/atoms/AtomView";
@@ -12,6 +13,7 @@ import NoSearchResults from "../components/organism/NoSearchResults";
 import FiltersSection from "../components/organism/FiltersSection";
 
 export default function Search({ navigation }) {
+    const [refreshing, setRefreshing] = useState(true)
     const [filterModalVisible, setFilterModalVisible] = useState(false)
     const [notificationList, setNotificationList] = useState([]);
     const [selectedFacultyNames, setSelectedFacultyNames] = useState(undefined);
@@ -56,25 +58,23 @@ export default function Search({ navigation }) {
     const getNotifications = async () => {
         const notifList = await new NotificationService().getAllNotifications({
             facultyList: selectedFacultyNames, 
-            timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod)
+            timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod),
+            searchText: searchText
         })
         handleNotificationList(notifList);
+        setRefreshing(() => false);
     }
 
     useEffect(() => {
-        const getNotifsWithFilters = async () => {
-            const payload = await new NotificationService().getAllNotifications({ 
-                facultyList: selectedFacultyNames, 
-                timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod), 
-                searchText: searchText });
-            // const payload = await new NotificationService().getAllNotifications();
-            handleNotificationList(payload)
-        }
-        getNotifsWithFilters().catch(console.error)
+        getNotifications().catch(console.error)
+
     }, [currNotifListRef.current , searchText, selectedFacultyNames, selectedTimePeriod])
 
     return (
         <AtomView style={searchPageStyle.parent}>
+            {
+                refreshing ? <ActivityIndicator /> : null
+            } 
             <AtomView style={searchPageStyle.searchContainer}>
                 <TextInputEle style={searchPageStyle.textInput}
                     editable={true}
@@ -100,7 +100,7 @@ export default function Search({ navigation }) {
                 </AtomView>
             }
             { notificationList?.length 
-            ? <AnnouncementList navigation={navigation} announcementList={notificationList} />
+            ? <AnnouncementList navigation={navigation} announcementList={notificationList} refreshing={refreshing} onRefresh={getNotifications} />
             : <NoSearchResults />
             
             // : <AnnouncementSkeletonGroup itemCount={6} containerStyle={{ margin: 15, padding: 10 }}/>

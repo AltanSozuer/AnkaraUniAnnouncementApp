@@ -3,9 +3,15 @@ export default function AtomFlatList({
     style,
     data,
     renderItem,
-    keyExtractor
+    keyExtractor,
+    refreshControlComp
 }) {
     return (
-        <FlatList style={style} horizontal={false} data={data} renderItem={renderItem} keyExtractor={keyExtractor} />
+        <FlatList style={style} 
+            horizontal={false} 
+            data={data} 
+            renderItem={renderItem} 
+            keyExtractor={keyExtractor}
+            refreshControl={refreshControlComp} />
     )
 }
