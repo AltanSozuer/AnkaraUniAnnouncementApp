@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,7 +7,8 @@ import Home from './src/pages/Home';
 import Profile from './src/pages/Profile';
 import Search from './src/pages/Search';
 import AnnouncementDetail from './src/pages/AnnouncementDetail';
-import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
+import SplashScreen from './src/pages/SplashScreen';
+
 
 const HomepageStack = createNativeStackNavigator();
 
@@ -61,10 +62,9 @@ function ProfilePageStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+const MainAppRoutes = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator initialRouteName='Home'
+    <Tab.Navigator initialRouteName='Home'
         screenOptions={{
           tabBarActiveTintColor: 'green',
           tabBarInactiveTintColor: 'black',
@@ -97,8 +97,20 @@ export default function App() {
               tabBarLabel: 'Profile',
               tabBarIcon: ({ color, size }) => <Feather name='user' size={size} color={color} />
             }} />
-
+ 
       </Tab.Navigator>
+  )
+} 
+
+const AllRoutes = createNativeStackNavigator()
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <AllRoutes.Navigator initialRouteName='Splash'>
+        <AllRoutes.Screen name='Splash' component={SplashScreen} options={{headerShown: false}} />
+        <AllRoutes.Screen name='MainAppRoutes' component={MainAppRoutes} options={{headerShown: false}} />
+      </AllRoutes.Navigator>
     </NavigationContainer>
   );
 }

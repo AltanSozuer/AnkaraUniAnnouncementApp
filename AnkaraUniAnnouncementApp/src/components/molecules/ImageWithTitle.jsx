@@ -11,7 +11,7 @@ export default function ImageWithTitle({
 }) {
     return (
         <AtomView style={containerStyle}>
-            <AtomImage source={imgSource} style={imageStyle} />
+            <AtomImage source={{uri: imgSource}} style={imageStyle} />
             <AtomText text={title} style={titleStyle} />
         </AtomView>
     )
