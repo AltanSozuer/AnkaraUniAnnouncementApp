@@ -4,14 +4,19 @@ import { useNavigation } from '@react-navigation/native';
 import AtomView from '../atoms/AtomView';
 import AtomImage from '../atoms/AtomImage';
 
-export default function Splash() {
+export default function Splash({
+    isAuthenticated
+}) {
     const navigation = useNavigation()
     const [animate, setAnimate] = useState(true);
 
     useEffect(() => {
         setTimeout(() => {
-            setAnimate(() => false)
-            navigation.replace('MainAppRoutes')
+            setAnimate(() => false);
+            navigation.replace(
+                isAuthenticated ? 'MainAppRoutes' : 'Auth'
+            )  
+            // navigation.replace('MainAppRoutes')
         }, 4000)
     }, [])
 
