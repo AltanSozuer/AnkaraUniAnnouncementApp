@@ -1,17 +1,18 @@
 import { useState, useContext } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    SafeAreaView,
-    TextInput,
-    Button,
-  } from 'react-native';
-import * as Keychain from 'react-native-keychain';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 import { AxiosContext } from "../context/AxiosContext";
+import AtomImage from "../components/atoms/AtomImage";
+import AtomButton from "../components/atoms/AtomButton";
+import AtomText from "../components/atoms/AtomText";
+import loginPageStyle from "../styles/LoginPage";
+import AtomSafeAreaView from "../components/atoms/AtomSafeAreaView";
+import AtomView from "../components/atoms/AtomView";
+import AtomTextInput from "../components/atoms/AtomTextInput";
 
-export default function Login(params) {
+export default function Login() {
+    const navigation = useNavigation()
     const [userInfoObj, setUserInfoObj] = useState({ email: '', password: '' })
     const authContext = useContext(AuthContext);
     const { publicAxios } = useContext(AxiosContext);
@@ -33,70 +34,111 @@ export default function Login(params) {
                 isAuthenticated: true
             })
 
-            await Keychain.setGenericPassword(
-                'token',
-                JSON.stringify({ accessToken, refreshToken }),
-            );
+            await AsyncStorage.setItem(
+              'token',
+              JSON.stringify({ accessToken, refreshToken })
+            )
+
+            navigation.replace('MainAppRoutes')
         }
         catch(err) {
-            // Add here and modal or alert that indicates login process is failed
             console.log('login failed: ', err);
+            alert('Login is failed. Please try again.');
+            return;
         }
     }
 
+    const onRegister = () => {
+      navigation.replace('Register')
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.logo}>AUNotif</Text>
-          <View style={styles.form}>
-            <TextInput
-              style={styles.input}
+        <AtomSafeAreaView style={loginPageStyle.container}>
+          <AtomImage source={require("../../assets/aunotif_logo.png")} 
+            style={{ width: 200, height: 100, marginVertical: '20%', marginHorizontal: '20%'}}/>
+          <AtomView style={loginPageStyle.form}>
+            <AtomTextInput
+              style={loginPageStyle.input}
               placeholder="Email"
-              placeholderTextColor="#fefefe"
+              placeholderTextColor="gray"
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={handleFormData('email')}
               value={userInfoObj.email}
             />
     
-            <TextInput
-              style={styles.input}
+            <AtomTextInput
+              style={loginPageStyle.input}
               placeholder="Password"
-              placeholderTextColor="#fefefe"
+              placeholderTextColor="gray"
               secureTextEntry
               onChangeText={handleFormData('password')}
               value={userInfoObj.password}
             />
-          </View>
-          <Button title="Login" style={styles.button} onPress={() => onLogin()} />
-        </SafeAreaView>
+          </AtomView>
+          <AtomButton title="Login"
+            style={loginPageStyle.loginBtn}
+            mode={"elevated"}
+            buttonColor={"white"}
+            textColor={"green"} 
+            onPress={() => onLogin()} />
+
+          <AtomView style={loginPageStyle.registerContainer}>
+            <AtomText text={'Not a member? '} style={loginPageStyle.registerText} />
+            <AtomButton title="Register now"
+              style={loginPageStyle.registerBtn}
+              mode={"text"}
+              buttonColor={"white"}
+              textColor={"green"} 
+              onPress={() => onRegister()} />
+          </AtomView>
+        </AtomSafeAreaView>
       );
 };
 
+//     container: {
+//       flex: 1,
+//       backgroundColor: 'white',
+//       alignItems: 'center',
+//       justifyContent: 'flex-start',
+//       width: '100%',
+//     },
+//     logo: {
+//       fontSize: 60,
+//       color: '#fff',
+//       margin: '10%',
+//     },
+//     form: {
+//       width: '80%',
+//       margin: '10%',
+//     },
+//     input: {
+//       fontSize: 20,
+//       color: 'black',
+//       paddingBottom: 10,
+//       borderBottomColor: 'green',
+//       borderBottomWidth: 1,
+//       borderRadius: 10,
+//       marginVertical: 20
+//     },
+//     loginBtn: {
+//       fontSize: 18,
+//       fontWeight: 300
+//     },
+//     registerContainer: {
+//       flex: 1,
+//       flexDirection: 'row',
+//       alignItems: 'center',
+//       marginTop: '40%'
+//     },
+//     registerBtn: {
+//       fontSize: 14,
+//       fontWeight: 300,
+//       borderWidth: 0
+//     },
+//     registerText: {
+//       fontSize: 14,
+//       fontWeight: 300,
+//     }
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#000',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      width: '100%',
-    },
-    logo: {
-      fontSize: 60,
-      color: '#fff',
-      margin: '20%',
-    },
-    form: {
-      width: '80%',
-      margin: '10%',
-    },
-    input: {
-      fontSize: 20,
-      color: '#fff',
-      paddingBottom: 10,
-      borderBottomColor: '#fff',
-      borderBottomWidth: 1,
-      marginVertical: 20,
-    },
-    button: {},
-  });
+//   });
