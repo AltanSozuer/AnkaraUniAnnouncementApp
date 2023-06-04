@@ -1,4 +1,5 @@
 import { useState, createRef } from "react";
+import { HelperText } from "react-native-paper";
 import { UserWithPass } from "../models/User";
 import AtomView from "../components/atoms/AtomView";
 import AtomText from "../components/atoms/AtomText";
@@ -7,8 +8,12 @@ import AtomTouchableOpacity from "../components/atoms/AtomTouchableOpacity";
 import AtomScrollView from "../components/atoms/AtomScrollView";
 import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import AtomTextInput from "../components/atoms/AtomTextInput";
+import AtomButton from "../components/atoms/AtomButton";
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Register(params) {
+    const navigation = useNavigation();
     const [ userInfoObj, setUserInfoObj ] = useState({ name: '', surname: '', email: '', password: '', passwordVerify: '' })
     const [ loading, setLoading ] = useState(false);
     const [ errorText, setErrorText ] = useState("");
@@ -24,7 +29,12 @@ export default function Register(params) {
             setUserInfoObj( ( oldValue ) => ({ ...oldValue, [name]: newValue }))
         }
     }
-     const handleSubmitButton = () => {
+
+    const onClickLoginPage = () => {
+        navigation.replace('Login')
+    }
+
+    const handleSubmitButton = () => {
         setErrorText(() => '');
         if (!userInfoObj.name) {
             alert('Please fill name');
@@ -92,12 +102,8 @@ export default function Register(params) {
     if(isRegistrationSuccess) {
             return (
                 <AtomView style={{flex: 1,backgroundColor: 'white',justifyContent: 'center' }}>
-                    <AtomImage source={require('../../assets/favicon.png')}
-                        style={{
-                            height: 150,
-                            resizeMode: 'contain',
-                            alignSelf: 'center'
-                        }} />
+                    <AtomImage source={require("../../assets/aunotif_logo.png")} 
+                        style={{ width: 200, height: 100, marginVertical: '20%', marginHorizontal: '20%'}}/>
                     <AtomText text={'Registration Success'} />
                     {
                     // <AtomTouchableOpacity
@@ -117,12 +123,13 @@ export default function Register(params) {
                     justifyContent: 'center',
                     alignContent: 'center' }}>
                     <AtomView style={{alignItems: 'center'}}>
-                        <AtomImage source={require('../../assets/favicon.png')}
+                        <AtomImage source={require('../../assets/aunotif_logo.png')}
                             style={{
                                 width: '50%',
-                                height: 100,
+                                marginTop: '15%',
+                                height: 150,
                                 resizeMode: 'contain',
-                                margin: 30,
+                                alignSelf: 'center'
                             }} />
                     </AtomView>
                     <KeyboardAvoidingView enabled>
@@ -139,6 +146,7 @@ export default function Register(params) {
                                     surnameInputRef.current && surnameInputRef.current.focus()
                                 }
                                 blurOnSubmit={false} />
+                            
                         </AtomView>
                         <AtomView style={styles.SectionStyle}>
                             <AtomTextInput
@@ -185,10 +193,6 @@ export default function Register(params) {
                                 ref={passwordInputRef}
                                 returnKeyType="next"
                                 secureTextEntry={true}
-                                onSubmitEditing={() =>
-                                    addressInputRef.current &&
-                                    addressInputRef.current.focus()
-                                }
                                 blurOnSubmit={false} />
                         </AtomView>
                         <AtomView style={styles.SectionStyle}>
@@ -202,10 +206,6 @@ export default function Register(params) {
                                 ref={passwordInputRef}
                                 returnKeyType="next"
                                 secureTextEntry={true}
-                                onSubmitEditing={() =>
-                                    addressInputRef.current &&
-                                    addressInputRef.current.focus()
-                                }
                                 blurOnSubmit={false} />
                         </AtomView>
 
@@ -214,12 +214,25 @@ export default function Register(params) {
                             {errorText}
                             </Text>
                         ) : null}
-                        <AtomTouchableOpacity
-                            style={styles.buttonStyle}
-                            activeOpacity={0.5}
-                            onPress={handleSubmitButton}>
-                            <AtomText style={styles.buttonTextStyle} text={"REGISTER"} />
-                        </AtomTouchableOpacity>
+                        <AtomButton title={'Register'}
+                            styleContainer={styles.buttonStyle}
+                            style={styles.buttonTextStyle}
+                            mode={"elevated"}
+                            buttonColor={"white"}
+                            textColor={"green"} 
+                            onPress={handleSubmitButton} />
+
+                        <AtomView style={styles.loginContainer}>
+                            <AtomText text={'Joined us before?'} style={styles.loginText} />
+                            <AtomButton title={'Login'}
+                                styleContainer={styles.loginBtn}
+                                style={styles.loginText}
+                                mode={"text"}
+                                buttonColor={"white"}
+                                textColor={"green"} 
+                                onPress={onClickLoginPage} />
+                        </AtomView>
+                            
                     </KeyboardAvoidingView>
                 </AtomScrollView>
             </AtomView>
@@ -228,7 +241,7 @@ export default function Register(params) {
 
 const styles = StyleSheet.create({
     SectionStyle: {
-      flexDirection: 'row',
+      flexDirection: 'column',
       height: 40,
       marginTop: 20,
       marginLeft: 35,
@@ -236,22 +249,17 @@ const styles = StyleSheet.create({
       margin: 10,
     },
     buttonStyle: {
-      backgroundColor: 'green',
-      borderWidth: 0,
-      color: '#FFFFFF',
-      borderColor: '#7DE24E',
-      height: 40,
-      alignItems: 'center',
-      borderRadius: 30,
-      marginLeft: 35,
-      marginRight: 35,
+      marginHorizontal: 35,
+      borderWidth: 1,
+      borderColor: '#ebedeb',
       marginTop: 20,
-      marginBottom: 20,
+    //   marginBottom: 20,
+      fontSize: 18,
+      fontWeight: 300
     },
     buttonTextStyle: {
-      color: 'white',
-      paddingVertical: 10,
-      fontSize: 16,
+      fontSize: 18,
+      fontWeight: 300
     },
     inputStyle: {
       flex: 1,
@@ -273,4 +281,21 @@ const styles = StyleSheet.create({
       fontSize: 18,
       padding: 30,
     },
+    loginContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 35,
+        marginTop: 60
+    },
+    loginBtn: {
+        fontSize: 14,
+        fontWeight: 300,
+        borderWidth: 0
+    },
+    loginText: {
+        fontSize: 14,
+        fontWeight: 300,
+    }
   });

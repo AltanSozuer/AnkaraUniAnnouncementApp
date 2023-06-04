@@ -2,6 +2,7 @@ import { Button } from "react-native-paper"
 import PropTypes from 'prop-types'
 
 export default function AtomButton({
+    styleContainer,
     style,
     title,
     onPress,
@@ -12,7 +13,9 @@ export default function AtomButton({
     
 }) {
     return (
-        <Button labelStyle={style} onPress={onPress} 
+        <Button style={styleContainer} 
+            labelStyle={style} 
+            onPress={onPress} 
             mode={mode} 
             buttonColor={buttonColor} 
             textColor={textColor}

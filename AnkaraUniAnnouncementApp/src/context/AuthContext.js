@@ -1,5 +1,5 @@
 import { useState, createContext } from "react";
-import * as Keychain from 'react-native-keychain';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext(null);
 const { Provider } = AuthContext;
@@ -12,7 +12,7 @@ function AuthProvider({ children }) {
     })
 
     const logout = async () => {
-        await Keychain.resetGenericPassword();
+        await AsyncStorage.clear();
         setAuthState({ accessToken: null, refreshToken: null, isAuthenticated: false });
     }
 
