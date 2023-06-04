@@ -10,17 +10,18 @@ export default function AtomButton({
     buttonColor,
     textColor,
     disabled,
-    
+    loading
 }) {
     return (
         <Button style={styleContainer} 
             labelStyle={style} 
             onPress={onPress} 
-            mode={mode} 
+            mode={mode}
+            loading={loading}
             buttonColor={buttonColor} 
             textColor={textColor}
             disabled={disabled} >
-            {title}
+            {loading ? null : title}
         </Button>
     )
 }
@@ -41,5 +42,6 @@ AtomButton.propTypes = {
 AtomButton.defaultValues = {
     mode: "contained",
     disabled: false,
-    buttonColor: "red"
+    buttonColor: "red",
+    loading: false
 }

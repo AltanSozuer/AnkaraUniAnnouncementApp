@@ -1,24 +1,24 @@
-import { useState, createRef } from "react";
-import { HelperText } from "react-native-paper";
-import { UserWithPass } from "../models/User";
+import { useState, createRef, useContext } from "react";
+import { useNavigation } from '@react-navigation/native';
 import AtomView from "../components/atoms/AtomView";
 import AtomText from "../components/atoms/AtomText";
 import AtomImage from "../components/atoms/AtomImage";
-import AtomTouchableOpacity from "../components/atoms/AtomTouchableOpacity";
 import AtomScrollView from "../components/atoms/AtomScrollView";
-import { KeyboardAvoidingView, StyleSheet } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import AtomTextInput from "../components/atoms/AtomTextInput";
 import AtomButton from "../components/atoms/AtomButton";
-import { useNavigation } from '@react-navigation/native';
+import { AxiosContext } from "../context/AxiosContext";
+import registerPageStyle from "../styles/RegisterPage";
 
-
-export default function Register(params) {
+export default function Register() {
     const navigation = useNavigation();
     const [ userInfoObj, setUserInfoObj ] = useState({ name: '', surname: '', email: '', password: '', passwordVerify: '' })
     const [ loading, setLoading ] = useState(false);
     const [ errorText, setErrorText ] = useState("");
     const [ isRegistrationSuccess, setIsRegistrationSuccess ] = useState(false);
     
+    const { publicAxios } = useContext(AxiosContext);
+
     const nameInputRef = createRef();
     const surnameInputRef = createRef();
     const emailInputRef = createRef();
@@ -32,6 +32,11 @@ export default function Register(params) {
 
     const onClickLoginPage = () => {
         navigation.replace('Login')
+    }
+
+    const onRegister = async () => {
+        const response = await publicAxios.post('/register', userInfoObj);
+        return { data: response?.data, status: response?.status};
     }
 
     const handleSubmitButton = () => {
@@ -52,67 +57,43 @@ export default function Register(params) {
             alert('Please fill password');
             return;
         }
-        //Show Loader
-        setLoading(true);
-        const userData = new UserWithPass({
-            name: userInfoObj.name,
-            surname: userInfoObj.surname,
-            email: userInfoObj.email,
-            password: userInfoObj.password,
-        });
         
-        // var formBody = [];
-        // for (const key in dataToSend) {
-        // var encodedKey = encodeURIComponent(key);
-        // var encodedValue = encodeURIComponent(dataToSend[key]);
-        // formBody.push(encodedKey + '=' + encodedValue);
-        // }
-        // formBody = formBody.join('&');
+        setLoading(() => true);
+        
+        onRegister().then((responseJson) => {
+            setLoading(() => false);
+            console.log('responseJson: ',responseJson);
 
-        // fetch('http://localhost:3000/api/user/register', {
-        // method: 'POST',
-        // body: formBody,
-        // headers: {
-        //     //Header Defination
-        //     'Content-Type':
-        //     'application/x-www-form-urlencoded;charset=UTF-8',
-        // },
-        // })
-        // .then((response) => response.json())
-        // .then((responseJson) => {
-        //     //Hide Loader
-        //     setLoading(false);
-        //     console.log(responseJson);
-        //     // If server response message same as Data Matched
-        //     if (responseJson.status === 'success') {
-        //     setIsRegistrationSuccess(true);
-        //     console.log(
-        //         'Registration Successful. Please Login to proceed'
-        //     );
-        //     } else {
-        //     setErrorText(() => responseJson.msg);
-        //     }
-        // })
-        // .catch((error) => {
-        //     //Hide Loader
-        //     setLoading(false);
-        //     console.error(error);
-        // });
+            // If server response status 201
+            if (responseJson.status === 201) {
+                setIsRegistrationSuccess(true);
+                console.log(
+                    'Registration Successful. Please Login to proceed'
+                );
+            } 
+            else {
+                setErrorText(() => responseJson.msg);
+            }
+        })
+        .catch((error) => {
+            setLoading(() => false);
+            console.error(error);
+            alert('Register is failed. Please try again.');
+            return;
+        });
     };
     if(isRegistrationSuccess) {
             return (
-                <AtomView style={{flex: 1,backgroundColor: 'white',justifyContent: 'center' }}>
-                    <AtomImage source={require("../../assets/aunotif_logo.png")} 
-                        style={{ width: 200, height: 100, marginVertical: '20%', marginHorizontal: '20%'}}/>
-                    <AtomText text={'Registration Success'} />
-                    {
-                    // <AtomTouchableOpacity
-                    //     style={styles.buttonStyle}
-                    //     activeOpacity={0.5}
-                    //     onPress={() => props.navigation.navigate('LoginScreen')}>
-                    //     <Text style={styles.buttonTextStyle}>Login Now</Text>
-                    // </AtomTouchableOpacity>
-                    }
+                <AtomView style={{flex: 1,backgroundColor: 'white', alignItems: "center",justifyContent: 'center' }}>
+                    <AtomImage source={require("../../assets/complete.png")} 
+                        style={{ width: 200, height: 200, marginVertical: '10%', marginHorizontal: '20%'}}/>
+                    <AtomText text={'Registration Success'} style={registerPageStyle.loginSuccessText} />
+                    <AtomButton title={'Login'} 
+                        mode={"elevated"}
+                        buttonColor={"white"}
+                        textColor={"green"}
+                        style={registerPageStyle.buttonStyle}
+                        onPress={() => navigation.replace('Login')} />
                 </AtomView>
             )
         }
@@ -133,9 +114,9 @@ export default function Register(params) {
                             }} />
                     </AtomView>
                     <KeyboardAvoidingView enabled>
-                        <AtomView style={styles.SectionStyle}>
+                        <AtomView style={registerPageStyle.SectionStyle}>
                             <AtomTextInput
-                                style={styles.inputStyle}
+                                style={registerPageStyle.inputStyle}
                                 onChangeText={handleFormData('name')}
                                 underlineColorAndroid="#f000"
                                 placeholder="Enter Name"
@@ -148,9 +129,9 @@ export default function Register(params) {
                                 blurOnSubmit={false} />
                             
                         </AtomView>
-                        <AtomView style={styles.SectionStyle}>
+                        <AtomView style={registerPageStyle.SectionStyle}>
                             <AtomTextInput
-                                style={styles.inputStyle}
+                                style={registerPageStyle.inputStyle}
                                 onChangeText={handleFormData('surname')}
                                 underlineColorAndroid="#f000"
                                 placeholder="Enter Surname"
@@ -164,9 +145,9 @@ export default function Register(params) {
                                 }
                                 blurOnSubmit={false} />
                         </AtomView>
-                        <AtomView style={styles.SectionStyle}>
+                        <AtomView style={registerPageStyle.SectionStyle}>
                             <AtomTextInput
-                                style={styles.inputStyle}
+                                style={registerPageStyle.inputStyle}
                                 onChangeText={handleFormData('email')}
                                 underlineColorAndroid="#f000"
                                 placeholder="Enter Email"
@@ -182,9 +163,9 @@ export default function Register(params) {
                                 blurOnSubmit={false} />
                             
                         </AtomView>
-                        <AtomView style={styles.SectionStyle}>
+                        <AtomView style={registerPageStyle.SectionStyle}>
                             <AtomTextInput
-                                style={styles.inputStyle}
+                                style={registerPageStyle.inputStyle}
                                 onChangeText={handleFormData('password')}
                                 underlineColorAndroid="#f000"
                                 placeholder="Enter Password"
@@ -195,9 +176,9 @@ export default function Register(params) {
                                 secureTextEntry={true}
                                 blurOnSubmit={false} />
                         </AtomView>
-                        <AtomView style={styles.SectionStyle}>
+                        <AtomView style={registerPageStyle.SectionStyle}>
                             <AtomTextInput
-                                style={styles.inputStyle}
+                                style={registerPageStyle.inputStyle}
                                 onChangeText={handleFormData('passwordVerify')}
                                 underlineColorAndroid="#f000"
                                 placeholder="Enter Password Again"
@@ -209,24 +190,23 @@ export default function Register(params) {
                                 blurOnSubmit={false} />
                         </AtomView>
 
-                        { errorText !== '' ? (
-                            <Text style={styles.errorTextStyle}>
-                            {errorText}
-                            </Text>
+                        { errorText || errorText?.length ? (
+                            alert(errorText)
                         ) : null}
                         <AtomButton title={'Register'}
-                            styleContainer={styles.buttonStyle}
-                            style={styles.buttonTextStyle}
+                            styleContainer={registerPageStyle.buttonStyle}
+                            style={registerPageStyle.buttonTextStyle}
                             mode={"elevated"}
+                            loading={loading}
                             buttonColor={"white"}
                             textColor={"green"} 
                             onPress={handleSubmitButton} />
 
-                        <AtomView style={styles.loginContainer}>
-                            <AtomText text={'Joined us before?'} style={styles.loginText} />
+                        <AtomView style={registerPageStyle.loginContainer}>
+                            <AtomText text={'Joined us before?'} style={registerPageStyle.loginText} />
                             <AtomButton title={'Login'}
-                                styleContainer={styles.loginBtn}
-                                style={styles.loginText}
+                                styleContainer={registerPageStyle.loginBtn}
+                                style={registerPageStyle.loginText}
                                 mode={"text"}
                                 buttonColor={"white"}
                                 textColor={"green"} 
@@ -238,64 +218,3 @@ export default function Register(params) {
             </AtomView>
         )
 };
-
-const styles = StyleSheet.create({
-    SectionStyle: {
-      flexDirection: 'column',
-      height: 40,
-      marginTop: 20,
-      marginLeft: 35,
-      marginRight: 35,
-      margin: 10,
-    },
-    buttonStyle: {
-      marginHorizontal: 35,
-      borderWidth: 1,
-      borderColor: '#ebedeb',
-      marginTop: 20,
-    //   marginBottom: 20,
-      fontSize: 18,
-      fontWeight: 300
-    },
-    buttonTextStyle: {
-      fontSize: 18,
-      fontWeight: 300
-    },
-    inputStyle: {
-      flex: 1,
-    //   color: 'white',
-      paddingLeft: 15,
-      paddingRight: 15,
-      borderWidth: 1,
-      borderRadius: 30,
-      borderColor: '#dadae8',
-    },
-    errorTextStyle: {
-      color: 'red',
-      textAlign: 'center',
-      fontSize: 14,
-    },
-    successTextStyle: {
-      color: 'white',
-      textAlign: 'center',
-      fontSize: 18,
-      padding: 30,
-    },
-    loginContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 35,
-        marginTop: 60
-    },
-    loginBtn: {
-        fontSize: 14,
-        fontWeight: 300,
-        borderWidth: 0
-    },
-    loginText: {
-        fontSize: 14,
-        fontWeight: 300,
-    }
-  });
