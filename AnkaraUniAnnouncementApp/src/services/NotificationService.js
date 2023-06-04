@@ -1,10 +1,10 @@
-import axios from 'axios';
 import Notification from '../models/Notification';
-const SOURCE_URL = 'http://localhost:8080';
-
+ 
 export class NotificationService {
-    
-    constructor() { }
+
+    constructor(authAxios) { 
+        this.authAxios = authAxios;
+    }
 
     /**
      * Fetches raw list of notification data by API call
@@ -16,13 +16,12 @@ export class NotificationService {
      */
     async getAllNotifications({facultyList, timeUntil, searchText} = {}) {
         try { 
-            const notifications = axios.post(`${SOURCE_URL}${'/notifications'}`, {
+            const notifications = this.authAxios.post('/notifications', {
                 facultyList,
                 timeUntil,
                 searchText
             })
             .then(({data}) => {
-                console.log('getAllNotifications: ',data);
                 return data.data.map(dt => new Notification(dt));
             })
             .catch(err => {

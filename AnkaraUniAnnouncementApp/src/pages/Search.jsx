@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { ActivityIndicator } from "react-native";
 import AtomIconButton from "../components/atoms/AtomIconButton";
 import TextInputEle from "../components/organism/TextInputEle";
@@ -11,6 +11,7 @@ import { NotificationService } from "../services/NotificationService";
 import { subtractGivenAmountOfTimeToNow } from "../utils/DateManipulation";
 import NoSearchResults from "../components/organism/NoSearchResults";
 import FiltersSection from "../components/organism/FiltersSection";
+import { AxiosContext } from "../context/AxiosContext";
 
 export default function Search({ navigation }) {
     const [refreshing, setRefreshing] = useState(true)
@@ -20,6 +21,8 @@ export default function Search({ navigation }) {
     const [selectedTimePeriod, setSelectedTimePeriod] = useState(undefined)
     const [searchText, setSearchText] = useState("");
     const currNotifListRef = useRef(notificationList)
+
+    const { authAxios } = useContext(AxiosContext)
 
     const handleSearchText = (newSearchText) => {
         setSearchText(() => newSearchText);
@@ -56,7 +59,7 @@ export default function Search({ navigation }) {
 
 
     const getNotifications = async () => {
-        const notifList = await new NotificationService().getAllNotifications({
+        const notifList = await new NotificationService(authAxios).getAllNotifications({
             facultyList: selectedFacultyNames, 
             timeUntil: selectedTimePeriod && subtractGivenAmountOfTimeToNow(selectedTimePeriod),
             searchText: searchText

@@ -4,8 +4,7 @@ class User {
         surname,
         email
     }) {
-        this.name = String(name);
-        this.surname = String(surname);
+        this.fullname = String(name) + String(surname);
         this.email = String(email);
     }
 }
