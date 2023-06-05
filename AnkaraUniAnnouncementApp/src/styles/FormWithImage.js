@@ -4,7 +4,8 @@ const formWithImageStyle = StyleSheet.create({
     parentContainer: {
         flex: 1,
         alignItems: "center",
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         margin: 20
     },
     scrollContainer: {

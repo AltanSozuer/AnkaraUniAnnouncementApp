@@ -7,7 +7,6 @@ const announcementDetailStyle = StyleSheet.create({
     date: {
         width: 160,
         backgroundColor: "white",
-        justifyContent: "right",
         marginLeft: "auto",
         marginRight: 20,
         borderWidth: 2,

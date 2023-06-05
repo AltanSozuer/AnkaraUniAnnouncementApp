@@ -5,6 +5,6 @@ export default function AtomImage({
     source
 }) {
     return (
-        <Image style={style} source={{uri: source}} src={src} />
+        <Image style={style} source={source} src={src} />
     )
 }
